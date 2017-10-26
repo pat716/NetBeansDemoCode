@@ -11,25 +11,31 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import com.asgteach.familytree.model.Person;
 
 /**
  *
  * @author E0191MD
  */
 public class PersonFXBoundController implements Initializable {
+    @FXML
+    private Label margeLabel;
+    
+    final Person marge = new Person("Marge", "Simpson", Person.Gender.FEMALE);
     
     @FXML
-    private Label label;
+    private void changeButtonAction(ActionEvent event){
+        marge.setMiddlename("Louise");
+    }
     
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+    private void resetButtonAction(ActionEvent event){
+        marge.setMiddlename("");
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        margeLabel.textProperty().bind(marge.fullnameProperty());
     }    
     
 }

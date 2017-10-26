@@ -6,6 +6,7 @@
 package com.asgteach.familytree.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -44,13 +45,13 @@ public class Person implements Serializable{
                 sb.append(firstname.get());
             }
             if(!middlename.get().isEmpty()){
-                sb.append(middlename.get());
+                sb.append(" ").append(middlename.get());
             }
             if(!lastname.get().isEmpty()){
-                sb.append(lastname.get());
+                sb.append(" ").append(lastname.get());
             }
             if(!suffix.get().isEmpty()){
-                sb.append(suffix.get());
+                sb.append(" ").append(suffix.get());
             }
             return sb.toString();
         }
@@ -68,10 +69,18 @@ public class Person implements Serializable{
         this.lastname.set(last);
         this.gender.set(gender);
         this.id = count++;
+        this.fullname.bind(fullNameBinding);
     }
     
     public Person(Person person){
-        
+        this.firstname.set(person.getFirstname());
+        this.middlename.set(person.getMiddlename());
+        this.lastname.set(person.getLastname());
+        this.suffix.set(person.getSuffix());
+        this.gender.set(person.getGender());
+        this.notes.set(person.getNotes());
+        this.id = person.getId();
+        this.fullname.bind(fullNameBinding);
     }
     
     public final long getId(){
@@ -146,6 +155,45 @@ public class Person implements Serializable{
     
     public final StringProperty suffixProperty(){
         return suffix;
+    }
+    
+    public Gender getGender(){
+        return gender.get();
+    }
+    
+    public void setGender(Gender gender){
+        this.gender.set(gender);
+    }
+    
+    public final ObjectProperty<Gender> genderProperty(){
+        return gender;
+    }
+    
+    @Override
+    public int hashCode(){
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.id)
+                + Objects.hashCode(this.fullname.get())
+                + Objects.hashCode(this.notes.get())
+                + Objects.hashCode(this.gender.get());
+        return hash;
+    }
+    
+    @Override
+    public boolean equals(Object obj){
+        if(obj == null || getClass() != obj.getClass()){
+            return false;
+        }
+        final Person other = (Person) obj;
+        return Objects.equals(this.id, other.id) 
+                && Objects.equals(this.fullname.get(), other.fullname.get())
+                && Objects.equals(this.notes.get(), other.notes.get())
+                && Objects.equals(this.gender.get(), other.gender.get());
+    }
+    
+    @Override
+    public String toString(){
+        return fullname.get();
     }
 }
 
